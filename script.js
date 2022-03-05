@@ -5,8 +5,6 @@ class workout {
   id = (Date.now() + '').slice(-10); // by Date.now we will get current timestamp.
   clicks = 0;
   constructor(coords, distance, duration) {
-    // this.date = ...
-    // this.id = ...
     this.coords = coords; // [lat, lng]
     this.distance = distance; // in km
     this.duration = duration; // in min
@@ -74,7 +72,6 @@ const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
 
-// Refactor all the below comment code using class.
 class App {
   #map;
   #mapZoomLevel = 13;
@@ -105,18 +102,14 @@ class App {
   }
 
   _loadMap(position) {
-    // console.log(position);
-    // const latitude = position.coords.latitude;
     const { latitude } = position.coords; // de-structuring
     const { longitude } = position.coords;
-    // console.log(latitude, longitude);
-    console.log(`https://www.google.com/maps/@${latitude},${longitude}`);
+   
+    //console.log(`https://www.google.com/maps/@${latitude},${longitude}`);
 
     const coords = [latitude, longitude];
-    //  Copied below code from leaflet library's overview to display map
     this.#map = L.map('map').setView(coords, this.#mapZoomLevel); // 'L' is a name-space of leaflet and in ('Id') of html.
-    // '13' in above setView is for map zoom in
-    //   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { //here tilelayer means a map is made up of tiles and we can also change themes of map.
+    
     L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -197,7 +190,7 @@ class App {
 
     // Add new object to workout array
     this.#workouts.push(workout);
-    // console.log(workout);
+
 
     // Render workout on map as marker
     this._renderWorkoutMarker(workout);
@@ -288,36 +281,31 @@ class App {
       work => work.id === workoutEl.dataset.id
     );
 
-    // Method in leaflet docs i-e setView, it is available on all map objects.
-    this.#map.setView(workout.coords, this.#mapZoomLevel, {
+     this.#map.setView(workout.coords, this.#mapZoomLevel, {
       animate: true,
       pan: {
         duration: 1,
       },
     });
-
-    // Using the public interface
-    // workout.click(); // with this, we can iteracte with each of the objects using their public inteface
   }
 
   _setLocalStorage() {
     // localStorage(key, value) is called local storage Api.
-    localStorage.setItem('workouts', JSON.stringify(this.#workouts)); // JSON.stringify is an another method to convert obj into string.
+    localStorage.setItem('workouts', JSON.stringify(this.#workouts)); 
   }
 
   _getLocalStorage() {
-    const data = JSON.parse(localStorage.getItem('workouts')); // JSON.parse is opposite to JSON.stringify, as it converts string to an object.
+    const data = JSON.parse(localStorage.getItem('workouts')); 
     // console.log(data);
 
     if (!data) return; // Guard clause
 
-    this.#workouts = data; // as we know this method getlocalStorage will be execute right in the begining when ever page is loaded and #workouts array will be empty, if there had any 'data' in local storage then it will said #workouts to that data.
+    this.#workouts = data; 
 
     // Render workouts on list when page loads
     this.#workouts.forEach(work => {
       this._renderWorkout(work);
-      // this._renderWorkoutMarker(work); // we can't load marker here coz when page will load 'renderWorkoutMarker' will be empty, as the app will get position first, then it load map so we will add this marker in _loadMap to execute.
-    });
+      });
   }
 
   // Public method, to remove all workouts/ reset app.
@@ -326,72 +314,5 @@ class App {
     location.reload();
   }
 }
-const app = new App(); // as page will load it will create an 'app' constructor
+const app = new App(); 
 
-///////////////////////////////////////////////
-////////////////////////////////////////////////
-// let map, mapEvent; // making map and mapEvent a global variables, then assign them when we use.
-// if (navigator.geolocation)
-//   navigator.geolocation.getCurrentPosition(
-//     function (position) {
-//       // this function is called 'success'
-//       // console.log(position);
-//       // const latitude = position.coords.latitude;
-//       const { latitude } = position.coords; // de-structuring
-//       const { longitude } = position.coords;
-//       // console.log(latitude, longitude);
-//       console.log(`https://www.google.com/maps/@${latitude},${longitude}`);
-
-//       const coords = [latitude, longitude];
-//       //  Copied below code from leaflet library's overview to display map
-//       map = L.map('map').setView(coords, 13); // 'L' is a name-space of leaflet and in ('Id') of html.
-//       // '13' in above setView is for map zoom in
-//       //   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { //here tilelayer means a map is made up of tiles and we can also change themes of map.
-//       L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-//         attribution:
-//           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-//       }).addTo(map);
-
-//       // Handling clicks on map
-//       map.on('click', function (mapE) {
-//         mapEvent = mapE;
-//         // 'on' method is not a feature of JS, it is in event.
-//         form.classList.remove('hidden');
-//         inputDistance.focus();
-//       });
-//     },
-//     function () {
-//       // this function is called 'error'
-//       alert('Could not get your position');
-//     }
-//   );
-// form.addEventListener('submit', function (e) {
-//   e.preventDefault();
-//   // clear input fields
-//   inputDistance.value =
-//     inputCadence.value =
-//     inputDuration.value =
-//     inputElevation.value =
-//       '';
-//   // Display marker
-//   console.log(mapEvent);
-//   const { lat, lng } = mapEvent.latlng;
-//   L.marker([lat, lng])
-//     .addTo(map)
-//     .bindPopup(
-//       L.popup({
-//         maxWidth: 300,
-//         minWidth: 100,
-//         autoClose: false,
-//         closeOnClick: false,
-//         className: 'running-popup', // added these all object-methods from leaflet-docs popup methods
-//       })
-//     )
-//     .setPopupContent('Workout') // leaflet-docs popup methods
-//     .openPopup();
-// });
-
-// inputType.addEventListener('change', function () {
-//   inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
-//   inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
-// });
