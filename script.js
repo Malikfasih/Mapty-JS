@@ -45,7 +45,6 @@ class Cycling extends workout {
   constructor(coords, distance, duration, elevationGain) {
     super(coords, distance, duration);
     this.elevationGain = elevationGain;
-    // this.cycling = cycling; // same as we did before constructor
     this.calcSpeed(); // here we called calcSpeed method in custructor.
     this._setDescription();
   }
@@ -56,11 +55,6 @@ class Cycling extends workout {
     return this.speed;
   }
 }
-
-// // just for experiment
-// const run1 = new Running([39, -12], 5.2, 24, 178);
-// const cycling1 = new Cycling([39, -12], 27, 95, 523);
-// console.log(run1, cycling1);
 
 //////////////////////////////////
 // APPLICATION ARCHITECTURE
@@ -166,9 +160,6 @@ class App {
       const cadence = +inputCadence.value;
       // Check if data is valid
       if (
-        // !Number.isFinite(distance) ||
-        // !Number.isFinite(duration) ||
-        // !Number.isFinite(cadence) // more neat way of doing is down.
         !validInputs(distance, duration, cadence) ||
         !allPositive(distance, duration, cadence)
       )
